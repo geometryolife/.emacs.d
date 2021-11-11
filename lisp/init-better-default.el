@@ -40,5 +40,39 @@
 ;; 打开elisp文件时，会打开elisp-mode，这个major-mode激活后会运行拥有的所有钩子
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 
+;; update-directory-autoloads 函数会扫描指定目录下的.el文件，检查.el文件中是否含有魔法
+;; 注释，如果这个文件有魔法注释，就会自动为它生成 autoload 的语句。
+;; 更新目录 DIRS 中 Lisp 文件的自动加载定义。
+;; ;;;###autoload
+;; (defun test-autoload()
+;;   (interactive)
+;;   (message "test autoload"))
+
+
+(defun indent-buffer ()
+  "Indent the currently visited buffer."
+  (interactive)
+  ;; point-min 获取选中文本的开头，point-max 获取选中文本的结尾
+  (indent-region (point-min) (point-max)))
+
+(defun indent-region-or-buffer ()
+  "Indent a region if selected, otherwise the whole buffer."
+  (interactive) ;; 可以交互式访问（M-x）或者绑定快捷键
+  ;; 当执行完 save-excursion 身体内的语句后，会恢复 执行包裹这些语句前 光标所在的位置
+  (save-excursion
+    (if (region-active-p)
+        (progn
+	  ;; 下面把选中的文本传给 indent-region 函数
+          (indent-region (region-beginning) (region-end))
+          (message "Indented selected region."))
+      ;; 没有选中的话，就直接调用 indent-buffer
+      (progn
+        (indent-buffer)
+        (message "Indented buffer.")))))
+
+;; 绑定和 indent-fuffer 快捷键一样的
+(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+
+
 
 (provide 'init-better-default)

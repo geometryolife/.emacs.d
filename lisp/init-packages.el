@@ -117,20 +117,7 @@
 ;; ;;;###autoload
 ;; (define-globalized-minor-mode global-company-mode company-mode company-mode-on)
 
-;; load-file, load-path and load 讲解：
-;; load-file:
-;; 加载一个指定文件。*.el或.elc文件会自动添加，而.gz文件不会。使用这个函数名时，Emacs
-;; 不用去猜测文件的扩展名。（这应该能提升性能）
-;; load：
-;; 使用load来加载一个文件，Emacs会通过 load-path 这个变量来搜索。参数不必提供全路径，例如：
-;; (load "undo")。如果.elc文件存在，那么它会先加载，若没有则会加载.el或.gz结尾的文件。
-;; 如果事先不知道文件的路径，那么可以使用这个函数。调用load的本质是调用load-file。
-;; require：
-;; 如果这个某个包还没有被加载，即没有使用autoload加载，就可以使用require来加载。
-;; require 会检查 features 变量，如果特性不存在，那么就会调用 load 来从后面的文件加载它。文件名
-;; 是根据特性名来猜测的，或者在可选参数中指定。最好用于elisp库或脚本，类似于其它语言的import。
-;; provide：
-;; 把后面的变量名放到 features 变量中，然后调用 load 来加载 feature。
+
 
 ;; 加载主题
 (load-theme 'monokai t)

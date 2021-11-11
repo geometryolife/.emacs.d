@@ -22,6 +22,76 @@
 (require 'init-keybindings)
 (require 'init-better-default)
 
+
+;; load-file, load-path and load 讲解：
+;; load-file:
+;; 加载一个指定文件。*.el或.elc文件会自动添加，而.gz文件不会。使用这个函数名时，Emacs
+;; 不用去猜测文件的扩展名。（这应该能提升性能）
+;; load：
+;; 使用load来加载一个文件，Emacs会通过 load-path 这个变量来搜索。参数不必提供全路径，例如：
+;; (load "undo")。如果.elc文件存在，那么它会先加载，若没有则会加载.el或.gz结尾的文件。
+;; 如果事先不知道文件的路径，那么可以使用这个函数。调用load的本质是调用load-file。
+;; require：
+;; 如果这个某个包还没有被加载，即没有使用autoload加载，就可以使用require来加载。
+;; require 会检查 features 变量，如果特性不存在，那么就会调用 load 来从后面的文件加载它。文件名
+;; 是根据特性名来猜测的，或者在可选参数中指定。最好用于elisp库或脚本，类似于其它语言的import。
+;; provide：
+;; 把后面的变量名放到 features 变量中，然后调用 load 来加载 feature。
+
+
+;; load-file and load
+;;(load "init-packages")
+;;(load "init-ui")
+;;(load "init-better-default")
+;;(load "init-keybindings")
+;;(load "init-org")
+
+;; (load-file "~/.emacs.d/lisp/init-packages.elc")
+;; (load-file "~/.emacs.d/lisp/init-ui.elc")
+;;(load-file "~/.emacs.d/lisp/init-better-default.elc")
+;; (load-file "~/.emacs.d/lisp/init-org.el")
+; (load-file "~/.emacs.d/lisp/init-keybindings.elc")
+
+
+;; provide 在没有 load 之前，即没有调 load-file 之前，是不会被调用的，只有
+;; 在调用了一次 load-file 后，提供 provide 的文件才会一行一行执行。当执行到
+;; (provide 'init-xxx) 这句时，在 features 这个变量中才会有 init-xxx 这个 feature。
+;; require 依赖 load， load 依赖 load-file
+;; rquire 不会因为没有调用 provide 就不工作，实际 require 在查找 features 中没有
+;; 某个 feature 后，它会调用 load 来加载，它会使用提供的名字在 load-path 中查找，查找到
+;; 这个文件后会先加载.elc文件，没有再加载.el文件，如果都没有，就报错。
+;; autoload 是从一个文件中自动加载一个函数。
+
+;; 当调用 autoload 从 test-autoload 的特性或文件名中加载时，就会把 test-autoload 这个函数
+;; 变成 autoload 类型的。当第二句调用这个函数时，就会自动 require 指定的文件。下面这个语句可以
+;; 使用魔法字符串自动生成。
+;; (autoload 'test-autoload "init-better-default")
+;; (test-autoload)
+
+;; 自动生成 autoload 文件。
+;; (update-file-autoloads "~/.emacs.d/lisp/init-better-default.el" t  "~/.emacs.d/lisp/init-better-default-autoload.el")
+
+;; 执行完这个语句，就相当执行了 (autoload 'test-autoload "init-better-default")，如果再执行 (test-autoload) 这个
+;; 函数，如果有 "~/.emacs.d/lisp/init-better-default“ 的el或elc文件就会加载进来。
+;; (load "init-better-default-autoload")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ;; 把 custom.el 放到 user-emacs-directory 目录下的 lisp 中
 ;; (setq custom-file "路径")，custom-file是存放用户配置Emacs的自动生成信息的变量名，后面是值
 ;; expand-file-name 函数用来把相对路径拼接成绝对路径，“路径” 默认目录。
@@ -109,3 +179,5 @@
 ;; 命名为 ModeName-mode ，里面所设置的快捷键则为 ModeName-mode-key-map ，而所有的钩子则会被
 ;; 命名为 ModeName-mode-hook 。
 ;; 比如，目前行号显示是一个全局配置，如果想让一些模式中不显示行号，那么可以使用 hook 特性修改。
+
+
