@@ -9,11 +9,11 @@
 ;; 全局的变量。为了防止命名冲突，如果自己的变量/函数，可以使用 名字/xxx 来命名变量/函数。例如：
 ;; geometryolife/xxx ，可以定义一个片段来快速补全自己的名字来方便使用。
 (setq-default abbrev-mode t)
-  (define-abbrev-table 'global-abbrev-table '(
-                                              ;; signature
-                                              ("8ge" "geometryolife")
-                                              ;; emacs regex
-                                              ))
+(define-abbrev-table 'global-abbrev-table '(
+                                            ;; signature
+                                            ("8ge" "geometryolife")
+                                            ;; emacs regex
+                                            ))
 
 ;; 禁止文件备份
 (setq make-backup-files nil)
@@ -72,6 +72,48 @@
 
 ;; 绑定和 indent-fuffer 快捷键一样的
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+
+(global-set-key (kbd "s-/") 'hippie-expand)
+
+;; hippie expand is dabbrev expand on steroids
+;; 定义一个列表变量，后面的是补全的列表，类似于 company 的后端，从前到后选择。列表中
+;; 都是一些函数，会返回一些符号。
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev ;; 当前buffer的token
+					 try-expand-dabbrev-all-buffers ;; 已打开的buffer的token
+					 try-expand-dabbrev-from-kill
+					 try-complete-file-name-partially
+					 try-complete-file-name
+					 try-expand-all-abbrevs
+					 try-expand-list
+					 try-expand-line
+					 try-complete-lisp-symbol-partially
+					 try-complete-lisp-symbol))
+
+
+;; always delete and copy recursively
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
+
+;; if there is a dired buffer displayed in the next window, use its
+;; current subdir, instead of the current subdir of this dired buffer
+(setq dired-dwim-target t)
+
+;; dired - reuse current buffer by pressing 'a'
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; (require 'dired) ;; 都使用 require 加载会变慢，用下面的优化
+;; 在加载完 dired 文件后，再执行后面的语句
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
+
+
+;; less typing when Emacs ask you yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; C-x C-j 直接打开当前文件的 dired-mode。
+(require 'dired-x)
+
+
 
 
 

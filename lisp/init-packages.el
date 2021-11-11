@@ -24,6 +24,7 @@
 				 ;; 修复Mac找不到程序路径
 				 exec-path-from-shell
 				 popwin ;; 光标追随打开的窗口
+				 ;; reveal-in-osx-finder ;; For Mac
 				 )  "Default packages")
 
 

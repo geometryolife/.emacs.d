@@ -1,5 +1,11 @@
 (package-initialize)
 
+;; org 文学编程方式来管理 Emacs 配置文件
+;; (require 'org-install)
+;;  (require 'ob-tangle)
+;;  (org-babel-load-file (expand-file-name "geometryolife.org" user-emacs-directory))
+
+
 ;; 当导入 init-packages 这个包时，会使用 load 函数来加载这个文件，此时是
 ;; 加载不到的。要使用下面这一句，把 init-packages 的文件路径加到 load-path 中。
 ;; 提示 load-path 已经包含 ~/.emacs.d 这个目录，重复加载可能会造成错误，
@@ -74,22 +80,6 @@
 ;; 执行完这个语句，就相当执行了 (autoload 'test-autoload "init-better-default")，如果再执行 (test-autoload) 这个
 ;; 函数，如果有 "~/.emacs.d/lisp/init-better-default“ 的el或elc文件就会加载进来。
 ;; (load "init-better-default-autoload")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ;; 把 custom.el 放到 user-emacs-directory 目录下的 lisp 中
@@ -179,5 +169,3 @@
 ;; 命名为 ModeName-mode ，里面所设置的快捷键则为 ModeName-mode-key-map ，而所有的钩子则会被
 ;; 命名为 ModeName-mode-hook 。
 ;; 比如，目前行号显示是一个全局配置，如果想让一些模式中不显示行号，那么可以使用 hook 特性修改。
-
-
