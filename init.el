@@ -25,8 +25,8 @@
 (require 'init-packages)
 (require 'init-ui)
 (require 'init-org)
-(require 'init-keybindings)
 (require 'init-better-default)
+(require 'init-keybindings)
 
 
 ;; load-file, load-path and load 讲解：

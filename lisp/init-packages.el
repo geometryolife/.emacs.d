@@ -30,6 +30,9 @@
 				 iedit
 				 org-pomodoro
 				 helm-ag
+				 flycheck
+				 ;; yasnippet
+				 auto-yasnippet
 				 )  "Default packages")
 
 
@@ -78,6 +81,8 @@
 ;; 全局启用 smartparens
 (smartparens-global-mode t)
 (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+;; (sp-local-pair 'lisp-interaction-mode "'" nil :actions nil)
+
 
 
 
@@ -157,12 +162,23 @@
 ;; 加载主题
 (load-theme 'monokai t)
 
-
-
 ;; M-s i = (counsel-imenu) M-s o (occur) M-s e (iedit)
 ;; (global-set-key (kbd "M-s e") 'iedit-mode)
 
+;; 番茄工作法
 (require 'org-pomodoro)
+
+;; 开启全局检查
+;; (global-flycheck-mode t)
+;; for js
+(add-hook 'js2-mode-hook 'flycheck-mode)
+
+;; snippets
+;;(add-to-list 'load-path
+;;             "~/.emacs.d/plugins/yasnippet")
+;;(require 'yasnippet)
+;;(yas-reload-all)
+;;(add-hook 'prog-mode-hook #'yas-minor-mode)
 
 ;; provide 后接一个特性名，下面是把 init-packages 这个特性加载到 features 这个变量中
 (provide 'init-packages)
