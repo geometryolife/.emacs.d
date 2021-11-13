@@ -54,9 +54,11 @@
 
 (global-set-key (kbd "M-s i") 'counsel-imenu)
 
+(global-set-key (kbd "M-s e") 'iedit-mode)
+
 ;; 绑定快捷键为 C-c C-r
 (global-set-key "\C-c\ \C-r" 'recentf-open-files)
 
-
+(global-set-key (kbd "C-c p s") 'helm-do-ag-project-root)
 
 (provide 'init-keybindings)
