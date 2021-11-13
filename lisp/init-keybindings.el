@@ -19,7 +19,6 @@
 ;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
 ;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
 
-
 ;; 天气预报函数
 ;;(defun my/tianqi()
 ;;  "天气预报 base on https://github.com/chubin/wttr.in"
@@ -32,5 +31,32 @@
 (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
 (global-set-key (kbd "C-c p f") 'counsel-git)
+
+(global-set-key (kbd "C-c a") 'org-agenda)
+;; r aka remember
+(global-set-key (kbd "C-c r") 'org-capture)
+
+(global-set-key (kbd "C-c t i") 'my-toggle-web-indent)
+(js2r-add-keybindings-with-prefix "C-c C-m")
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+;; 绑定和 indent-fuffer 快捷键一样的
+(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+
+(global-set-key (kbd "s-/") 'hippie-expand)
+
+;; (require 'dired) ;; 都使用 require 加载会变慢，用下面的优化
+;; 在加载完 dired 文件后，再执行后面的语句
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
+
+(global-set-key (kbd"M-s o") 'occur-dwim)
+
+(global-set-key (kbd "M-s i") 'counsel-imenu)
+
+;; 绑定快捷键为 C-c C-r
+(global-set-key "\C-c\ \C-r" 'recentf-open-files)
+
+
 
 (provide 'init-keybindings)

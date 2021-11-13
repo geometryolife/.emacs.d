@@ -28,6 +28,7 @@
 				 js2-refactor
 				 expand-region
 				 iedit
+				 org-pomodoro
 				 )  "Default packages")
 
 
@@ -131,11 +132,11 @@
 
   (setq indent-tabs-mode nil))
 
-(global-set-key (kbd "C-c t i") 'my-toggle-web-indent)
+
 
 ;; config for js2-mode
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
-(js2r-add-keybindings-with-prefix "C-c C-m")
+
 
 
 ;; 全局开启 company-mode
@@ -155,10 +156,12 @@
 ;; 加载主题
 (load-theme 'monokai t)
 
-(global-set-key (kbd "C-=") 'er/expand-region)
+
 
 ;; M-s i = (counsel-imenu) M-s o (occur) M-s e (iedit)
 ;; (global-set-key (kbd "M-s e") 'iedit-mode)
+
+(require 'org-pomodoro)
 
 ;; provide 后接一个特性名，下面是把 init-packages 这个特性加载到 features 这个变量中
 (provide 'init-packages)

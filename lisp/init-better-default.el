@@ -23,7 +23,6 @@
 ;; 启用删除选择模式后，键入的文本将替换选择
 (delete-selection-mode t)
 
-
 ;; require 从一个文件中加载特性，如果没有提供文件名，那么默认
 ;; 会把 require 后的词作为文件名
 ;; 开启“最进”菜单
@@ -32,8 +31,6 @@
 (recentf-mode 1)
 ;; 设置“最近”打开的最大项目数的变量为25，默认为10			
 (setq recentf-max-menu-items 25)
-;; 绑定快捷键为 C-c C-r
-(global-set-key "\C-c\ \C-r" 'recentf-open-files)
 
 ;; 使用add-hook特性
 ;; 添加一个钩子到emacs-lisp-mode-hook上
@@ -53,8 +50,6 @@
 	     (ignore-errors (backward-up-list))
 	     ;; funcall 是调用一个函数的意思
 	     (funcall fn)))))
-
-
 
 
 (defun indent-buffer ()
@@ -78,10 +73,7 @@
         (indent-buffer)
         (message "Indented buffer.")))))
 
-;; 绑定和 indent-fuffer 快捷键一样的
-(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
 
-(global-set-key (kbd "s-/") 'hippie-expand)
 
 ;; hippie expand is dabbrev expand on steroids
 ;; 定义一个列表变量，后面的是补全的列表，类似于 company 的后端，从前到后选择。列表中
@@ -109,10 +101,7 @@
 ;; dired - reuse current buffer by pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
 
-;; (require 'dired) ;; 都使用 require 加载会变慢，用下面的优化
-;; 在加载完 dired 文件后，再执行后面的语句
-(with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
+
 
 
 ;; less typing when Emacs ask you yes or no
@@ -148,7 +137,7 @@
               (regexp-quote sym))))
         regexp-history)
   (call-interactively 'occur))
-(global-set-key (kbd"M-s o") 'occur-dwim)
+
 
 (defun js2-imenu-make-index ()
   (interactive)
@@ -169,6 +158,8 @@
 	  (lambda ()
 	    (setq imenu-create-index-function 'js2-imenu-make-index)))
 
-(global-set-key (kbd "M-s i") 'counsel-imenu)
+
+
+;; (set-language-environment "UTF-8")
 
 (provide 'init-better-default)
