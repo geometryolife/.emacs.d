@@ -40,13 +40,21 @@
 ;; 打开elisp文件时，会打开elisp-mode，这个major-mode激活后会运行拥有的所有钩子
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 
-;; update-directory-autoloads 函数会扫描指定目录下的.el文件，检查.el文件中是否含有魔法
-;; 注释，如果这个文件有魔法注释，就会自动为它生成 autoload 的语句。
-;; 更新目录 DIRS 中 Lisp 文件的自动加载定义。
-;; ;;;###autoload
-;; (defun test-autoload()
-;;   (interactive)
-;;   (message "test autoload"))
+;; define-advice 类似于cpp的模板，或者c语言的宏，可以生成新的代码。show-paren-function 是
+;; 用来高亮括号的函数。我们可以增强函数的功能，但是不用修改函数的代码。
+;; 定义一个 fix-show-paren-function 的 define-advice，:around 代表执行的过程中，执行下面
+;; 的一段代码。
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens."
+  ;; 查找有没有一个括号，如果有括号就直接调用这个函数，如果光标在中间，会先调用 backward-up-list
+  (cond ((looking-at-p "\\s(") (funcall fn))
+	;; 为了不让光标移动，使用 save-excursion，即调用完backward-up-list，后返回原位
+	(t (save-excursion
+	     (ignore-errors (backward-up-list))
+	     ;; funcall 是调用一个函数的意思
+	     (funcall fn)))))
+
+
 
 
 (defun indent-buffer ()
@@ -113,8 +121,54 @@
 ;; C-x C-j 直接打开当前文件的 dired-mode。
 (require 'dired-x)
 
+;; 跳转到函数的开头，然后向前搜索，搜索到“\r”后，即把dos下的换行符替换成空字符串
+(defun remove-dos-eol ()
+  "Replace DOS eolns CR LF with Unix eolns CR"
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\r" nil t) (replace-match "")))
 
+;; 获得一个显示table。让它不显示，实现应藏dos下的回车换行
+(defun hidden-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
 
+;; dwim = do what i mean
+(defun occur-dwim ()
+  "Call `occur' with a sane default."
+  (interactive)
+  (push (if (region-active-p)
+            (buffer-substring-no-properties
+             (region-beginning)
+             (region-end))
+          (let ((sym (thing-at-point 'symbol)))
+            (when (stringp sym)
+              (regexp-quote sym))))
+        regexp-history)
+  (call-interactively 'occur))
+(global-set-key (kbd"M-s o") 'occur-dwim)
 
+(defun js2-imenu-make-index ()
+  (interactive)
+  (save-excursion
+    ;; (setq imenu-generic-expression '((nil "describe\\(\"\\(.+\\)\"" 1)))
+    (imenu--generic-function '(("describe" "\\s-*describe\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+			       ("it" "\\s-*it\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+			       ("test" "\\s-*test\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+			       ("before" "\\s-*before\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+			       ("after" "\\s-*after\\s-*(\\s-*[\"']\\(.+\\)[\"']\\s-*,.*" 1)
+			       ("Function" "function[ \t]+\\([a-zA-Z0-9_$.]+\\)[ \t]*(" 1)
+			       ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*=[ \t]*function[ \t]*(" 1)
+			       ("Function" "^var[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*=[ \t]*function[ \t]*(" 1)
+			       ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*()[ \t]*{" 1)
+			       ("Function" "^[ \t]*\\([a-zA-Z0-9_$.]+\\)[ \t]*:[ \t]*function[ \t]*(" 1)
+			       ("Task" "[. \t]task([ \t]*['\"]\\([^'\"]+\\)" 1)))))
+(add-hook 'js2-mode-hook
+	  (lambda ()
+	    (setq imenu-create-index-function 'js2-imenu-make-index)))
+
+(global-set-key (kbd "M-s i") 'counsel-imenu)
 
 (provide 'init-better-default)

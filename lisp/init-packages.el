@@ -3,9 +3,9 @@
 ;; 初始化包管理器
 ;; 把下载源添加到package系统里
 (when (>= emacs-major-version 24)
-    ;;(package-initialize)
-    (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-    )
+  ;;(package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  )
 ;; 引入cl
 (require 'cl)
 
@@ -24,7 +24,10 @@
 				 ;; 修复Mac找不到程序路径
 				 exec-path-from-shell
 				 popwin ;; 光标追随打开的窗口
-				 ;; reveal-in-osx-finder ;; For Mac
+				 web-mode
+				 js2-refactor
+				 expand-region
+				 iedit
 				 )  "Default packages")
 
 
@@ -43,7 +46,7 @@
 	;; 当有包没安装时，返回nil
         when (not (package-installed-p pkg)) do (return nil)
 	;; 如果都安装完了，返回t
-          finally (return t)))
+        finally (return t)))
 
 ;; 如果 COND 产生 nil，则执行 BODY，否则返回 nil
 (unless (geometryolife/packages-installed-p)
@@ -53,10 +56,10 @@
   ;; 刷新软件源
   (package-refresh-contents)
   ;; dolist 循环列表
-    (dolist (pkg geometryolife/packages)
-      (when (not (package-installed-p pkg))
-	;; 当没有安装时，安装
-        (package-install pkg))))
+  (dolist (pkg geometryolife/packages)
+    (when (not (package-installed-p pkg))
+      ;; 当没有安装时，安装
+      (package-install pkg))))
 
 ;; 配置让Emacs可以找到可执行程序
 (when (memq window-system '(mac ns))
@@ -70,16 +73,10 @@
 (require 'popwin)
 (popwin-mode t)
 
-;; 输入成对符号时，输入一半匹配另一半
-;; 是 autoload，所以不用使用 require
-;; 注：虽然视频中不需要require，但是我测试后，在写elisp单引号时，会错误补全
-;; 所以我还是加上来了。v27.2
-(require 'smartparens-config)
-;;(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
 ;; 全局启用 smartparens
 (smartparens-global-mode t)
-;; Always start smartparens mode in js-mode.
-;; (add-hook 'js-mode-hook #'smartparens-mode)
+(sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+
 
 
 ;; 引入并设置smex，增强M-x
@@ -101,8 +98,45 @@
 ;; 配置js2-mode
 (setq auto-mode-alist
       (append
-       '(("\\.js\\'" . js2-mode))
+       '(("\\.js\\'" . js2-mode)
+	 ("\\.html\\'" . web-mode)
+	 )
        auto-mode-alist))
+
+;; config for web mode
+;; 默认设置缩进为两个空格
+(defun my-web-mode-indent-setup ()
+  (setq web-mode-markup-indent-offset 2) ; web-mode, html tag in html file
+  (setq web-mode-css-indent-offset 2)    ; web-mode, css in html file
+  (setq web-mode-code-indent-offset 2)   ; web-mode, js code in html file
+  )
+
+(add-hook 'web-mode-hook 'my-web-mode-indent-setup)
+
+;; 切换缩进的空格数
+(defun my-toggle-web-indent ()
+  (interactive)
+  ;; web development
+  (if (or (eq major-mode 'js-mode) (eq major-mode 'js2-mode))
+      (progn
+	(setq js-indent-level (if (= js-indent-level 2) 4 2))
+	(setq js2-basic-offset (if (= js2-basic-offset 2) 4 2))))
+
+  (if (eq major-mode 'web-mode)
+      (progn (setq web-mode-markup-indent-offset (if (= web-mode-markup-indent-offset 2) 4 2))
+	     (setq web-mode-css-indent-offset (if (= web-mode-css-indent-offset 2) 4 2))
+	     (setq web-mode-code-indent-offset (if (= web-mode-code-indent-offset 2) 4 2))))
+  (if (eq major-mode 'css-mode)
+      (setq css-indent-offset (if (= css-indent-offset 2) 4 2)))
+
+  (setq indent-tabs-mode nil))
+
+(global-set-key (kbd "C-c t i") 'my-toggle-web-indent)
+
+;; config for js2-mode
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-m")
+
 
 ;; 全局开启 company-mode
 (global-company-mode t) ;; 这是一个autoload命令
@@ -118,10 +152,13 @@
 ;; ;;;###autoload
 ;; (define-globalized-minor-mode global-company-mode company-mode company-mode-on)
 
-
-
 ;; 加载主题
 (load-theme 'monokai t)
+
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+;; M-s i = (counsel-imenu) M-s o (occur) M-s e (iedit)
+;; (global-set-key (kbd "M-s e") 'iedit-mode)
 
 ;; provide 后接一个特性名，下面是把 init-packages 这个特性加载到 features 这个变量中
 (provide 'init-packages)
