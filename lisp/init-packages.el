@@ -31,8 +31,16 @@
 				 org-pomodoro
 				 helm-ag
 				 flycheck
-				 ;; yasnippet
+				 ;; yasnippetevil-leader
 				 auto-yasnippet
+				 evil
+				 evil-leader
+				 window-numbering
+				 ;; powerline
+				 ;; powerline-evil
+				 evil-surround
+				 evil-nerd-commenter
+				 which-key
 				 )  "Default packages")
 
 
@@ -179,6 +187,74 @@
 ;;(require 'yasnippet)
 ;;(yas-reload-all)
 ;;(add-hook 'prog-mode-hook #'yas-minor-mode)
+
+;; Evil
+(evil-mode 1)
+(setcdr evil-insert-state-map nil)
+(define-key evil-insert-state-map [escape] 'evil-normal-state)
+
+;; 开启evil-leader-key
+(global-evil-leader-mode)
+;; 配置 leader-key
+(evil-leader/set-key
+  "ff" 'find-file
+  "fr" 'recentf-open-files
+  "bb" 'switch-to-buffer
+  "bk" 'kill-buffer
+  "pf" 'counsel-git
+  "ps" 'helm-do-ag-project-root
+  "1" 'select-window-1
+  "2" 'select-window-2
+  "3" 'select-window-3
+  "4" 'select-window-4
+  "w/" 'split-window-right
+  "w-" 'split-window-below
+  ":" 'counsel-M-x
+  "wm" 'delete-other-windows
+  "qq" 'save-buffers-kill-terminal
+  )
+
+;; 设置 window-numbering
+(window-numbering-mode)
+
+;; 配置 powerline
+;; (require 'powerline)
+;; (powerline-default-theme)
+;; powerline-evil
+;; (require 'powerline-evil)
+
+(require 'evil-surround)
+(global-evil-surround-mode 1)
+
+;; 进入某些模式时，使用 Emacs state
+(dolist (mode '(ag-mode
+		flycheck-error-list-mode
+		occur-mode
+		git-rebase-mode))
+  (add-to-list 'evil-emacs-state-modes mode))
+
+;; 让 hjkl 在 occur-mode 生效 
+(add-hook 'occur-mode-hook
+	  (lambda ()
+	    (evil-add-hjkl-bindings occur-mode-map 'emacs
+	      (kbd "/")       'evil-search-forward
+	      (kbd "n")       'evil-search-next
+	      (kbd "N")       'evil-search-previous
+	      (kbd "C-d")     'evil-scroll-down
+	      (kbd "C-u")     'evil-scroll-up
+	      )))
+
+;; 配置 evil-nerd-commenter
+(evilnc-default-hotkeys)
+(define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+(define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+
+;; 配置 which-key
+;; (add-to-list 'load-path "path/to/which-key.el")
+(require 'which-key)
+(which-key-mode)
+(which-key-setup-side-window-right)
+
 
 ;; provide 后接一个特性名，下面是把 init-packages 这个特性加载到 features 这个变量中
 (provide 'init-packages)

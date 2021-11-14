@@ -30,7 +30,6 @@
 (global-set-key (kbd "C-h C-v") 'find-variable)
 (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
-(global-set-key (kbd "C-c p f") 'counsel-git)
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 ;; r aka remember
@@ -59,6 +58,12 @@
 ;; 绑定快捷键为 C-c C-r
 (global-set-key "\C-c\ \C-r" 'recentf-open-files)
 
-(global-set-key (kbd "C-c p s") 'helm-do-ag-project-root)
+;; (global-set-key (kbd "C-c p f") 'counsel-git)
+;; (global-set-key (kbd "C-c p s") 'helm-do-ag-project-root)
+
+;; 让 C-w 向前删除一个词
+(global-set-key (kbd "C-w") 'backward-kill-word)
+
+
 
 (provide 'init-keybindings)
