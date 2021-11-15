@@ -41,6 +41,9 @@
 				 evil-surround
 				 evil-nerd-commenter
 				 which-key
+				 2048-game
+				 ;; command-log-mode
+				 pallet
 				 )  "Default packages")
 
 
