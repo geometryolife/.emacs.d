@@ -1,4 +1,10 @@
-(package-initialize)
+;; fix wrong warning for v27.2 when use cask
+(setq warning-suppress-log-types '((package reinitialization)))
+(require 'cask "~/prog/cask/cask.el")
+(cask-initialize)
+(require 'pallet)
+(pallet-mode t)
+;; (package-initialize)
 
 ;; org 文学编程方式来管理 Emacs 配置文件
 ;; (require 'org-install)

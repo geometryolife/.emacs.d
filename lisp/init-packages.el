@@ -2,49 +2,49 @@
 ;; 当版本大于24时，把package管理系统引入
 ;; 初始化包管理器
 ;; 把下载源添加到package系统里
-(when (>= emacs-major-version 24)
-  ;;(package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  )
+;; (when (>= emacs-major-version 24)
+;;   ;;(package-initialize)
+;;   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;;   )
 ;; 引入cl
 (require 'cl)
 
 ;;add whatever packages you want here
 ;; 定义一个package列表，后续会在这个列表中添加更多package
-(defvar geometryolife/packages '(
-				 company ;; 补全插件
-				 monokai-theme ;; 主题
-				 hungry-delete ;; 增强删除功能
-				 restart-emacs  ;; 快速重启 Emacs
-				 swiper ;; 增强搜索
-				 counsel ;; 常用 Emacs 命令的Ivy-enhanced版本的集合。
-				 smartparens ;; 智能配对括号等
-				 js2-mode ;; 增强js的major-mode
-				 nodejs-repl ;; 交互式执行js
-				 ;; 修复Mac找不到程序路径
-				 exec-path-from-shell
-				 popwin ;; 光标追随打开的窗口
-				 web-mode
-				 js2-refactor
-				 expand-region
-				 iedit
-				 org-pomodoro
-				 helm-ag
-				 flycheck
-				 ;; yasnippetevil-leader
-				 auto-yasnippet
-				 evil
-				 evil-leader
-				 window-numbering
-				 ;; powerline
-				 ;; powerline-evil
-				 evil-surround
-				 evil-nerd-commenter
-				 which-key
-				 2048-game
-				 ;; command-log-mode
-				 pallet
-				 )  "Default packages")
+;; (defvar geometryolife/packages '(
+;; 				 company ;; 补全插件
+;; 				 monokai-theme ;; 主题
+;; 				 hungry-delete ;; 增强删除功能
+;; 				 restart-emacs  ;; 快速重启 Emacs
+;; 				 swiper ;; 增强搜索
+;; 				 counsel ;; 常用 Emacs 命令的Ivy-enhanced版本的集合。
+;; 				 smartparens ;; 智能配对括号等
+;; 				 js2-mode ;; 增强js的major-mode
+;; 				 nodejs-repl ;; 交互式执行js
+;; 				 ;; 修复Mac找不到程序路径
+;; 				 exec-path-from-shell
+;; 				 popwin ;; 光标追随打开的窗口
+;; 				 web-mode
+;; 				 js2-refactor
+;; 				 expand-region
+;; 				 iedit
+;; 				 org-pomodoro
+;; 				 helm-ag
+;; 				 flycheck
+;; 				 ;; yasnippetevil-leader
+;; 				 auto-yasnippet
+;; 				 evil
+;; 				 evil-leader
+;; 				 window-numbering
+;; 				 ;; powerline
+;; 				 ;; powerline-evil
+;; 				 evil-surround
+;; 				 evil-nerd-commenter
+;; 				 which-key
+;; 				 2048-game
+;; 				 ;; command-log-mode
+;; 				 pallet
+;; 				 )  "Default packages")
 
 
 ;; 将用户明确安装的软件包存储在此处。
@@ -53,29 +53,29 @@
 ;; 不再需要哪些软件包。
 ;; 您可以使用它在其他机器上（重新）安装软件包
 ;; 通过运行package-install-selected-packages。
-(setq package-selected-packages geometryolife/packages)
+;; (setq package-selected-packages geometryolife/packages)
 
 ;; 定义一个函数，判断列表中的包是否都安装到geometryolife/packages目录中，
-(defun geometryolife/packages-installed-p ()
-  ;; 通过循环遍历确定，loop for是cl中的写法，要cl依赖
-  (loop for pkg in geometryolife/packages
-	;; 当有包没安装时，返回nil
-        when (not (package-installed-p pkg)) do (return nil)
-	;; 如果都安装完了，返回t
-        finally (return t)))
+;; (defun geometryolife/packages-installed-p ()
+;;   ;; 通过循环遍历确定，loop for是cl中的写法，要cl依赖
+;;   (loop for pkg in geometryolife/packages
+;; 	;; 当有包没安装时，返回nil
+;;         when (not (package-installed-p pkg)) do (return nil)
+;; 	;; 如果都安装完了，返回t
+;;         finally (return t)))
 
-;; 如果 COND 产生 nil，则执行 BODY，否则返回 nil
-(unless (geometryolife/packages-installed-p)
-  ;; 列表中列出的包还没安装就会调用下面的语句来安装
-  ;; 打印信息
-  (message "%s" "Refreshing package database...")
-  ;; 刷新软件源
-  (package-refresh-contents)
-  ;; dolist 循环列表
-  (dolist (pkg geometryolife/packages)
-    (when (not (package-installed-p pkg))
-      ;; 当没有安装时，安装
-      (package-install pkg))))
+;; ;; 如果 COND 产生 nil，则执行 BODY，否则返回 nil
+;; (unless (geometryolife/packages-installed-p)
+;;   ;; 列表中列出的包还没安装就会调用下面的语句来安装
+;;   ;; 打印信息
+;;   (message "%s" "Refreshing package database...")
+;;   ;; 刷新软件源
+;;   (package-refresh-contents)
+;;   ;; dolist 循环列表
+;;   (dolist (pkg geometryolife/packages)
+;;     (when (not (package-installed-p pkg))
+;;       ;; 当没有安装时，安装
+;;       (package-install pkg))))
 
 ;; 配置让Emacs可以找到可执行程序
 (when (memq window-system '(mac ns))
