@@ -11,7 +11,7 @@
  '(evil-want-C-u-scroll t)
  '(org-pomodoro-long-break-length 40)
  '(package-selected-packages
-   '(pkg-info popup ansi package-build epl git commander f s shut-up yasnippet which-key evil-surround evil-nerd-commenter 2048-game powerline company monokai-theme hungry-delete restart-emacs swiper counsel smartparens js2-mode nodejs-repl exec-path-from-shell popwin web-mode js2-refactor expand-region iedit org-pomodoro helm-ag flycheck auto-yasnippet evil evil-leader window-numbering))
+   '(use-package pkg-info popup ansi package-build epl git commander f s shut-up yasnippet which-key evil-surround evil-nerd-commenter 2048-game powerline company monokai-theme hungry-delete restart-emacs swiper counsel smartparens js2-mode nodejs-repl exec-path-from-shell popwin web-mode js2-refactor expand-region iedit org-pomodoro helm-ag flycheck auto-yasnippet evil evil-leader window-numbering))
  '(popwin:popup-window-position 'right)
  '(popwin:popup-window-width 100)
  '(tool-bar-mode nil))

@@ -62,7 +62,7 @@
 ;; (load-file "~/.emacs.d/lisp/init-ui.elc")
 ;;(load-file "~/.emacs.d/lisp/init-better-default.elc")
 ;; (load-file "~/.emacs.d/lisp/init-org.el")
-; (load-file "~/.emacs.d/lisp/init-keybindings.elc")
+					; (load-file "~/.emacs.d/lisp/init-keybindings.elc")
 
 
 ;; provide 在没有 load 之前，即没有调 load-file 之前，是不会被调用的，只有
@@ -141,11 +141,11 @@
 ;; 下面是如何添加新的模式与对应文件类型的例子（与我们配置 js2-mode 时相似的例子），
 ;; (setq auto-mode-alist
 ;;   (append
-   ;; File name (within directory) starts with a dot.
+;; File name (within directory) starts with a dot.
 ;;    '(("/\\.[^/]*\\'" . fundamental-mode)
-     ;; File name has no dot.
+;; File name has no dot.
 ;;     ("/[^\\./]*\\'" . fundamental-mode)
-     ;; File name ends in ‘.C’.
+;; File name ends in ‘.C’.
 ;;     ("\\.C\\'" . c++-mode))
 ;;   auto-mode-alist))
 
@@ -175,3 +175,25 @@
 ;; 命名为 ModeName-mode ，里面所设置的快捷键则为 ModeName-mode-key-map ，而所有的钩子则会被
 ;; 命名为 ModeName-mode-hook 。
 ;; 比如，目前行号显示是一个全局配置，如果想让一些模式中不显示行号，那么可以使用 hook 特性修改。
+
+;; (require xxx)
+;; (pp (macroexpand '(use-package xxxx)))
+
+;; (pp (macroexpand '(use-package aaa
+;;   ;; 在使用 use-package 之前先执行 init 的代码块
+;;   :init
+;;   ;; 当 init 中要定义多个变量时，使用 progn 分组
+;;   (progn
+;;     (setq my-name "Joe")
+;;     (setq my-age 20))
+;;   ;; 想在 use-package 之后执行
+;;   :config
+;;   (setq my-dog "peter")
+;;   ;; autoload
+;;   :commands
+;;   (global-company-mode)
+;;   ;; 延迟加载
+;;   :defer t
+;;   ;; 绑定键
+;;   :bind
+;;   )))
