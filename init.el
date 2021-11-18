@@ -196,4 +196,8 @@
 ;;   :defer t
 ;;   ;; 绑定键
 ;;   :bind
+;;   ;; 确保包存在
+;;   :ensur t
+;;   ;; 使用稳定版
+;;   :pin melpa-stable
 ;;   )))

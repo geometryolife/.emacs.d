@@ -258,6 +258,11 @@
 (which-key-mode)
 (which-key-setup-side-window-right)
 
+;; config company anaconda
+(eval-after-load "company"
+  '(add-to-list 'company-backends 'company-anaconda))
+(add-hook 'python-mode-hook 'anaconda-mode)
+
 
 ;; provide 后接一个特性名，下面是把 init-packages 这个特性加载到 features 这个变量中
 (provide 'init-packages)
